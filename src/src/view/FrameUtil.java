@@ -9,6 +9,7 @@ import java.awt.*;
 public class FrameUtil {
 
     // return a JLabel variable
+    // username: password
     public static JLabel createJLabel(JFrame frame, Point location, int width, int height, String text)
     {
         JLabel jLabel = new JLabel(text);
@@ -19,6 +20,7 @@ public class FrameUtil {
     }
 
     // overload
+    // step:
     public static JLabel createJLabel(JFrame frame, String name, Font font, Point location, int width, int height) {
         JLabel label = new JLabel(name);
         label.setFont(font);

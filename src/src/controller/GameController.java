@@ -29,9 +29,10 @@ public class GameController {
         System.out.println("Do restart game here");
     }
 
-    // move the 1 * 1 rectangular
+
     //reset the mapModel and the parameter of the box
     public boolean doMove(int row, int col, Direction direction) {
+        // move the 1 * 1 rectangular
         if (model.getId(row, col) == 1) // if there is s 1 * 1 rectangular in that place
         {
             int nextRow = row + direction.getRow();
@@ -46,15 +47,25 @@ public class GameController {
                     BoxComponent box = view.getSelectedBox();
                     box.setRow(nextRow);
                     box.setCol(nextCol);
-// ? what is the meaning of the magic number 2 ?
+                    // ? what is the meaning of the magic number 2 ? : may be padding
                     box.setLocation(box.getCol() * view.getGRID_SIZE() + 2, box.getRow() * view.getGRID_SIZE() + 2); // GRID_SIZE is a final int 50
                     box.repaint(); // repaint
                     return true; // the rectangular is moved
                 }
             }
         }
+//
+//        // move the 1 * 2 rectangular
+//        if (model.getId(row, col) == 2)
+//        {
+//            // locate the left part of the rectangular
+//            if
+//        }
+
         return false; // the rectangular can not be moved to the intended place (due to boundary or other rectangular)
     }
+
+
 
     //todo: add other methods such as loadGame, saveGame...
 

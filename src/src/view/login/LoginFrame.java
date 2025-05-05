@@ -5,6 +5,7 @@ package src.view.login;
 
 import src.view.FrameUtil;
 import src.view.game.GameFrame;
+import src.view.game.GameStartInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +17,7 @@ public class LoginFrame extends JFrame {
     private JButton submitBtn;
     private JButton resetBtn;
     private GameFrame gameFrame;
+    private GameStartInterface gameStartInterface;
 
     //constructor, a window
     public LoginFrame(int width, int height) {
@@ -34,9 +36,9 @@ public class LoginFrame extends JFrame {
         submitBtn.addActionListener(e -> {
             System.out.println("Username = " + username.getText());
             System.out.println("Password = " + password.getText());
-            if (this.gameFrame != null)
+            if (this.gameStartInterface != null)
             {
-                this.gameFrame.setVisible(true); // turn to the game frame
+                this.gameStartInterface.setVisible(true); // turn to the game-start frame
                 this.setVisible(false); // hide the register page
             }
             //todo: check login info
@@ -57,5 +59,10 @@ public class LoginFrame extends JFrame {
 
     public void setGameFrame(GameFrame gameFrame) {
         this.gameFrame = gameFrame;
+    }
+
+    public void setGameStartInterface(GameStartInterface gameStartInterface)
+    {
+        this.gameStartInterface = gameStartInterface;
     }
 }
