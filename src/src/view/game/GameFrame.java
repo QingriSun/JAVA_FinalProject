@@ -18,6 +18,7 @@ public class GameFrame extends JFrame {
 
     private JLabel stepLabel;
     private GamePanel gamePanel;
+    private MovementPanel movementPanel;
 
     // constructor, new GameFrame(width, height, mapMadel)
     public GameFrame(int width, int height, MapModel mapModel) {
@@ -26,12 +27,16 @@ public class GameFrame extends JFrame {
         this.setLayout(null); // have no layout manager
         this.setSize(width, height);
         gamePanel = new GamePanel(mapModel);
-        gamePanel.setLocation(30, height / 2 - gamePanel.getHeight() / 2); // the y coordinate is dependent on the size of the frame and panel
+        movementPanel = new MovementPanel(gamePanel);
+        movementPanel.setLocation(width / 2 + 20, height / 2 - movementPanel.getHeight() / 2);
+        this.add(movementPanel);
+        int gamePanelX = 30;
+        gamePanel.setLocation(gamePanelX, height / 2 - gamePanel.getHeight() / 2); // the y coordinate is dependent on the size of the frame and panel
         this.add(gamePanel);
         this.controller = new GameController(gamePanel, mapModel);
 
-        this.restartBtn = FrameUtil.createButton(this, "Restart", new Point(gamePanel.getWidth() + 80, 120), 80, 50);
-        this.loadBtn = FrameUtil.createButton(this, "Load", new Point(gamePanel.getWidth() + 80, 210), 80, 50);
+        this.restartBtn = FrameUtil.createButton(this, "Restart", new Point(gamePanelX, height / 2 - 150), 80, 40);
+        this.loadBtn = FrameUtil.createButton(this, "Load", new Point(gamePanelX + 80 + 20,height /2 -150), 80, 40);
         this.stepLabel = FrameUtil.createJLabel(this, "Start", new Font("serif", Font.ITALIC, 22), new Point(gamePanel.getWidth() + 80, 70), 180, 50);
         gamePanel.setStepLabel(stepLabel);
 

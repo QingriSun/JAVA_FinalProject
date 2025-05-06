@@ -29,7 +29,7 @@ public class GamePanel extends ListenerPanel {
     public GamePanel(MapModel model) {
         boxes = new ArrayList<>();
         this.setVisible(true);
-        this.setFocusable(true);
+        this.setFocusable(true); // can be controlled by the keyboard
         this.setLayout(null);
         this.setSize(model.getWidth() * GRID_SIZE + 4, model.getHeight() * GRID_SIZE + 4); // GRID_SIZE is a unit length
         this.model = model;
@@ -110,6 +110,7 @@ public class GamePanel extends ListenerPanel {
     @Override
     public void doMouseClick(Point point)
     {
+        this.requestFocusInWindow();
         Component component = this.getComponentAt(point); // component is what the mouse clicks at
         if (component instanceof BoxComponent clickedComponent) // if (component instanceof BoxComponent) { BoxComponent clickedComponent = component);}
         {

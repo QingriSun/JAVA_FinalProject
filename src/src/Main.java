@@ -2,6 +2,7 @@ package src;
 
 import src.model.MapModel;
 import src.view.game.GameFrame;
+import src.view.game.GamePanel;
 import src.view.game.GameStartInterface;
 import src.view.login.LoginFrame;
 import src.view.game.GameStartInterface;
@@ -39,6 +40,7 @@ public class Main {
             // the initial state (should be only the log-in interface)
             gameStartInterface.setVisible(false);
             loginFrame.setGameStartInterface(gameStartInterface);
+
         });
     }
 }
