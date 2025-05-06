@@ -10,6 +10,12 @@ import src.view.game.GamePanel;
 
 import src.model.Direction;
 
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+
+import static javax.swing.SwingUtilities.paintComponent;
+
 
 /**
  * It is a bridge to combine GamePanel(view) and MapMatrix(model) in one game.
@@ -27,9 +33,21 @@ public class GameController {
         view.setController(this);
     }
 
-// needed extra code
+
+
     public void restartGame() {
-        System.out.println("Do restart game here");
+        System.out.println("Restart game");
+        // repaint the panel; paint a grey panel first
+        for ( int i = 0; i < view.getBoxes().size(); i++)
+        {
+            view.remove(view.getBoxes().get(i));
+        }
+        view.getBoxes().clear();
+        MapModel.copyMatrix(model.getMatrixInitial(), model.getMatrix());
+        view.initialGame();
+
+        this.view.setSteps(-1); // there is a "step++" in the afterMove method
+        this.view.afterMove();
     }
 
 

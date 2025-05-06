@@ -1,14 +1,41 @@
 package src.model;
 
+import java.sql.Array;
+
+
 /**
  * This class is to record the map of one game. For example:
  */
 public class MapModel {
     int[][] matrix;
+    int[][] matrixInitial;
 
     // constructor; input a two-dimensional array; new MaoModel(twoDimensionalMatrix)
     public MapModel(int[][] matrix) {
         this.matrix = matrix;
+        this.matrixInitial = new int[matrix.length][matrix[0].length];
+        copyMatrix(matrix, this.matrixInitial);
+    }
+    
+    public static void copyMatrix(int[][] initialMatrix, int[][] destinationMatrix)
+    {
+        for (int i = 0; i < initialMatrix.length; i++)
+        {
+            for (int j = 0; j < initialMatrix[0].length; j++)
+            {
+                destinationMatrix[i][j] = initialMatrix[i][j];
+            }
+        }
+    }
+
+    public void setMatrix(int matrix[][])
+    {
+        copyMatrix(matrix, this.matrix);
+    }
+
+    public  int[][] getMatrixInitial()
+    {
+        return matrixInitial;
     }
 
     public int getWidth() {

@@ -42,7 +42,6 @@ public class GameFrame extends JFrame {
 
         this.restartBtn.addActionListener(e -> // e for event, induced by the system
         {
-// the restartGame() method remain to be complete
             controller.restartGame();
             gamePanel.requestFocusInWindow();//enable key listener
         });

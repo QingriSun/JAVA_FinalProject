@@ -57,7 +57,6 @@ public class GamePanel extends ListenerPanel {
                 map[i][j] = model.getId(i, j);
             }
         }
-
         //build Component
         // paint the boxes regarding the mapModel
         for (int i = 0; i < map.length; i++) {
@@ -96,13 +95,14 @@ public class GamePanel extends ListenerPanel {
         this.repaint();
     }
 
+
     // draw the background of the panel
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g); // clear the background
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(0, 0, this.getWidth(), this.getHeight()); // fill the panel with grey color
-        Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 2); //creast an outline
+        Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 2); //create an outline
         this.setBorder(border); // draw an outline
     }
 
@@ -193,7 +193,22 @@ public class GamePanel extends ListenerPanel {
         return selectedBox;
     }
 
+    public void setSteps(int steps)
+    {
+        this.steps = steps;
+    }
+
+    public int getSteps()
+    {
+        return steps;
+    }
+
     public int getGRID_SIZE() {
         return GRID_SIZE;
+    }
+
+    public List<BoxComponent> getBoxes()
+    {
+        return boxes;
     }
 }
