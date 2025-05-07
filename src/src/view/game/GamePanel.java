@@ -25,6 +25,7 @@ public class GamePanel extends ListenerPanel {
     private int steps;
     private final int GRID_SIZE = 50;
     private BoxComponent selectedBox;
+    private VictoryInterface victoryInterface;
 
     // constructor, new GamePanel(mapModel)
     public GamePanel(MapModel model) {
@@ -35,6 +36,7 @@ public class GamePanel extends ListenerPanel {
         this.setSize(model.getWidth() * GRID_SIZE + 4, model.getHeight() * GRID_SIZE + 4); // GRID_SIZE is a unit length
         this.model = model;
         this.selectedBox = null;
+        this.victoryInterface = new VictoryInterface(this);
         initialGame();
     }
 
@@ -45,6 +47,10 @@ public class GamePanel extends ListenerPanel {
                         {1, 2, 2, 1, 0},
                         {1, 1, 1, 1, 1}
      */
+
+    // mark the 4 * 4 box
+    BoxComponent CaoCaoBox = new BoxComponent(Color.GREEN, 0, 0);
+    boolean isCaoCaoBox = false;
 
     //copy a map
     //from MapModel model
@@ -67,16 +73,19 @@ public class GamePanel extends ListenerPanel {
                     box = new BoxComponent(Color.ORANGE, i, j);
                     box.setSize(GRID_SIZE, GRID_SIZE);
                     map[i][j] = 0;
+                    isCaoCaoBox = false;
                 } else if (map[i][j] / 10 == 2) {
                     box = new BoxComponent(Color.PINK, i, j);
                     box.setSize(GRID_SIZE * 2, GRID_SIZE);
                     map[i][j] = 0;
                     map[i][j + 1] = 0;
+                    isCaoCaoBox = false;
                 } else if (map[i][j] / 10 == 3) {
                     box = new BoxComponent(Color.BLUE, i, j);
                     box.setSize(GRID_SIZE, GRID_SIZE * 2);
                     map[i][j] = 0;
                     map[i + 1][j] = 0;
+                    isCaoCaoBox = false;
                 } else if (map[i][j] / 10 == 4) {
                     box = new BoxComponent(Color.GREEN, i, j);
                     box.setSize(GRID_SIZE * 2, GRID_SIZE * 2);
@@ -84,12 +93,20 @@ public class GamePanel extends ListenerPanel {
                     map[i + 1][j] = 0;
                     map[i][j + 1] = 0;
                     map[i + 1][j + 1] = 0;
+                    isCaoCaoBox = true;
                 }
                 if (box != null) // map[i][j] is one of 1, 2, 3, 4
                 {
                     box.setLocation(j * GRID_SIZE + 2, i * GRID_SIZE + 2);
                     boxes.add(box); // add the specified box into the boxes array
                     this.add(box); // put the box component to the panel
+
+                    if (isCaoCaoBox)
+                    {
+                        // CaoCoaBox tracts the location of the 4 * 4 box
+                        // CaoCaoBox points to the same memory location asa the 4 * 4 box
+                        CaoCaoBox = boxes.getLast();
+                    }
                 }
             }
         }
@@ -178,6 +195,23 @@ public class GamePanel extends ListenerPanel {
     public void afterMove() {
         this.steps++;
         this.stepLabel.setText(String.format("Step: %d", this.steps));
+        checkVictory();
+    }
+
+    public void checkVictory()
+    {
+        int targetLocationX = getWidth() - 2 * getGRID_SIZE() - 2; // padding
+        int targetLocationY = getHeight() / 2 - getGRID_SIZE();
+        int currentX = CaoCaoBox.getCol() * getGRID_SIZE() + 2;
+        int currentY = CaoCaoBox.getRow() * getGRID_SIZE() + 2;
+        if (currentX == targetLocationX && currentY == targetLocationY)
+        {
+            System.out.println("Game win");
+            CaoCaoBox.setColor(Color.RED);
+            repaint();
+            victoryInterface.getLabelGameWin().setText(String.format("Step: %d", this.getSteps()));
+            victoryInterface.setVisible(true);
+        }
     }
 
     // change the step counter
@@ -211,5 +245,10 @@ public class GamePanel extends ListenerPanel {
     public List<BoxComponent> getBoxes()
     {
         return boxes;
+    }
+
+    public VictoryInterface getVictoryInterface()
+    {
+        return victoryInterface;
     }
 }

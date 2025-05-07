@@ -29,15 +29,15 @@ public class MovementPanel extends JPanel {
         this.add(btnUp);
         empty2 = new JPanel();
         this.add(empty2);
-        btnLeft = new JButton(new ImageIcon("/resources/icons/left.png"));
+        btnLeft = new JButton();
         this.add(btnLeft);
         empty3 = new JPanel();
         this.add(empty3);
-        btnRight = new JButton(new ImageIcon("/resources/icons/right.png"));
+        btnRight = new JButton();
         this.add(btnRight);
         empty4 = new JPanel();
         this.add(empty4);
-        btnDown = new JButton(new ImageIcon("/resources/icons/down.png"));
+        btnDown = new JButton();
         this.add(btnDown);
         empty5 = new JPanel();
         this.add(empty5);
@@ -56,4 +56,7 @@ public class MovementPanel extends JPanel {
         });
     }
 
+    public JButton getBtnRight() {
+        return btnRight;
+    }
 }

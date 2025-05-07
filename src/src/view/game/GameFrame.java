@@ -19,6 +19,7 @@ public class GameFrame extends JFrame {
     private JLabel stepLabel;
     private GamePanel gamePanel;
     private MovementPanel movementPanel;
+    private JPanel exitPanel;
 
     // constructor, new GameFrame(width, height, mapMadel)
     public GameFrame(int width, int height, MapModel mapModel) {
@@ -26,6 +27,7 @@ public class GameFrame extends JFrame {
         this.setTitle("2025 CS109 Project Demo");
         this.setLayout(null); // have no layout manager
         this.setSize(width, height);
+
         gamePanel = new GamePanel(mapModel);
         movementPanel = new MovementPanel(gamePanel);
         movementPanel.setLocation(width / 2 + 20, height / 2 - movementPanel.getHeight() / 2);
@@ -34,6 +36,14 @@ public class GameFrame extends JFrame {
         gamePanel.setLocation(gamePanelX, height / 2 - gamePanel.getHeight() / 2); // the y coordinate is dependent on the size of the frame and panel
         this.add(gamePanel);
         this.controller = new GameController(gamePanel, mapModel);
+
+        // tell the user where the exit is
+        exitPanel = new JPanel();
+        exitPanel.setVisible(true);
+        exitPanel.setSize(20, 2 * gamePanel.getGRID_SIZE());
+        exitPanel.setLocation(gamePanel.getX() + gamePanel.getWidth(), gamePanel.getY() + gamePanel.getWidth() / 4);
+        exitPanel.setBackground(Color.cyan);
+        this.add(exitPanel);
 
         this.restartBtn = FrameUtil.createButton(this, "Restart", new Point(gamePanelX, height / 2 - 150), 80, 40);
         this.loadBtn = FrameUtil.createButton(this, "Load", new Point(gamePanelX + 80 + 20,height /2 -150), 80, 40);
@@ -58,6 +68,18 @@ public class GameFrame extends JFrame {
         //todo: add other button here
         this.setLocationRelativeTo(null); // the window is placed in the centre of the screen
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        // set the location of the victoryInterface
+        getGamePanel().getVictoryInterface().setLocationRelativeTo(getMovementPanel().getBtnRight());
     }
 
+    public GamePanel getGamePanel()
+    {
+        return gamePanel;
+    }
+
+    public MovementPanel getMovementPanel()
+    {
+        return movementPanel;
+    }
 }

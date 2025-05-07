@@ -30,6 +30,10 @@ public class GameStartInterface extends JFrame {
         {
             this.setVisible(false);
             this.gameFrame.setVisible(true);
+
+
+            // set the location of the VictoryFrame，why it acts as if this.getMovementPanel.getBtnRight = null
+            this.gameFrame.getGamePanel().getVictoryInterface().setLocationRelativeTo(this.gameFrame.getMovementPanel().getBtnRight());
         });
 
         if (isLoggedInUser && haveGameSaving)
