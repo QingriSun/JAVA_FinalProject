@@ -16,6 +16,7 @@ import java.util.List;
  * It is the subclass of ListenerPanel, so that it should implement those four methods: do move left, up, down ,right.
  * The class contains a grids, which is the corresponding GUI view of the matrix variable in MapMatrix.
  */
+// if I change code derectly on gitHub
 public class GamePanel extends ListenerPanel {
     private List<BoxComponent> boxes;
     private MapModel model;
