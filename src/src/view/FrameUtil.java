@@ -46,4 +46,14 @@ public class FrameUtil {
         return button;
     }
 
+    public static JPanel createPanel(JFrame frame, Point location, int width, int height, Color color)
+    {
+        JPanel panel = new JPanel();
+        panel.setLocation(location);
+        panel.setSize(width, height);
+        panel.setBackground(color);
+        frame.add(panel);
+        return panel;
+    }
+
 }

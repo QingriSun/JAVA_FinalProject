@@ -1,9 +1,7 @@
 package src;
 
 import src.model.MapModel;
-import src.view.game.GameFrame;
-import src.view.game.GamePanel;
-import src.view.game.GameStartInterface;
+import src.view.game.*;
 import src.view.login.LoginFrame;
 import src.view.game.GameStartInterface;
 
@@ -31,10 +29,10 @@ public class Main {
                     {0, 0, 40, 40}
 
                     // matrix qualified for Task 2
-//                    {0, 20, 20, 21, 21},
-//                    {10, 12, 30, 40, 40},
-//                    {11, 13, 30, 40, 40},
-//                    {22, 22, 0, 23, 23}
+//                    {10, 20, 20, 21, 21},
+//                    {0, 12, 30, 40, 40},
+//                    {0, 13, 30, 40, 40},
+//                    {11, 22, 22, 23, 23}
 
             });
 
@@ -44,7 +42,7 @@ public class Main {
             loginFrame.setGameFrame(gameFrame);
 
             // turn the first two parameter into corresponding method output, when the log-in and game-saving are done
-            GameStartInterface gameStartInterface = new GameStartInterface(true,true,280,280);
+            GameStartInterface gameStartInterface = new GameStartInterface(true,true,280,280, gameFrame);
             gameStartInterface.setGameFrame(gameFrame);
             // the initial state (should be only the log-in interface)
             gameStartInterface.setVisible(false);
