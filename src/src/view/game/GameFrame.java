@@ -15,6 +15,7 @@ public class GameFrame extends JFrame {
     private GameController controller;
     private JButton restartBtn;
     private JButton loadBtn;
+    private JButton withdrawBtn;
 
     private JLabel stepLabel;
     private GamePanel gamePanel;
@@ -47,6 +48,7 @@ public class GameFrame extends JFrame {
 
         this.restartBtn = FrameUtil.createButton(this, "Restart", new Point(gamePanelX, height / 2 - 150), 80, 40);
         this.loadBtn = FrameUtil.createButton(this, "Load", new Point(gamePanelX + 80 + 20,height /2 -150), 80, 40);
+        this.withdrawBtn = FrameUtil.createButton(this, "Withdraw", new Point(gamePanelX, height / 2 + 110), 80, 40);
         this.stepLabel = FrameUtil.createJLabel(this, "Start", new Font("serif", Font.ITALIC, 22), new Point(gamePanel.getWidth() + 80, 70), 180, 50);
         gamePanel.setStepLabel(stepLabel);
 
@@ -63,6 +65,37 @@ public class GameFrame extends JFrame {
             String string = JOptionPane.showInputDialog(this /* the dialog will be at the centre of the parent component*/, "Input path:");
             System.out.println(string); //print to the terminal
             gamePanel.requestFocusInWindow();//enable key listener, 键盘
+        });
+
+        // get back to last state, and step --
+        this.withdrawBtn.addActionListener(e ->{
+            System.out.println("Withdraw");
+            int[][] lastState = new int[gamePanel.getModel().getMatrix().length][gamePanel.getModel().getMatrix()[0].length];
+            if (gamePanel.getStates().size() == 1) // the target last state is the initial state
+            {
+                lastState = gamePanel.getModel().getMatrixInitial();
+            }
+            else if (gamePanel.getStates().size() > 1)
+            {
+                // the last step is unwanted
+                gamePanel.getStates().removeLast();
+                lastState = gamePanel.getStates().getLast();
+            }
+            if (lastState != null) // when steps > 0
+            {
+                for ( int i = 0; i < gamePanel.getBoxes().size(); i++)
+                {
+                    gamePanel.remove(gamePanel.getBoxes().get(i));
+                }
+                gamePanel.getBoxes().clear();
+                MapModel.copyMatrix(lastState, gamePanel.getModel().getMatrix());
+                if (gamePanel.getSteps() > 0)
+                {
+                    gamePanel.setSteps(gamePanel.getSteps() - 1);
+                    gamePanel.getStepLabel().setText(String.format("Step: %d", gamePanel.getSteps()));
+                }
+                gamePanel.initialGame();
+            }
         });
 
         //todo: add other button here

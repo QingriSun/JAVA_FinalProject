@@ -16,7 +16,7 @@ import java.util.List;
  * It is the subclass of ListenerPanel, so that it should implement those four methods: do move left, up, down ,right.
  * The class contains a grids, which is the corresponding GUI view of the matrix variable in MapMatrix.
  */
-// if I change code derectly on gitHub
+// if I change code directly on gitHub
 public class GamePanel extends ListenerPanel {
     private List<BoxComponent> boxes;
     private MapModel model;
@@ -26,6 +26,10 @@ public class GamePanel extends ListenerPanel {
     private final int GRID_SIZE = 50;
     private BoxComponent selectedBox;
     private VictoryInterface victoryInterface;
+    // to record every state after every move
+    private int[][] gameState ;
+    // store the state (two-dimensional list)
+    private ArrayList<int [][]> states;
 
     // constructor, new GamePanel(mapModel)
     public GamePanel(MapModel model) {
@@ -37,6 +41,11 @@ public class GamePanel extends ListenerPanel {
         this.model = model;
         this.selectedBox = null;
         this.victoryInterface = new VictoryInterface(this);
+        this.steps = 0;
+
+        gameState = new int[model.getMatrix().length][model.getMatrix()[0].length];
+        states = new ArrayList<>();
+
         initialGame();
     }
 
@@ -55,7 +64,6 @@ public class GamePanel extends ListenerPanel {
     //copy a map
     //from MapModel model
     public void initialGame() {
-        this.steps = 0;
         int[][] map = new int[model.getHeight()][model.getWidth()];
         for (int i = 0; i < map.length; i++)
         {
@@ -196,6 +204,10 @@ public class GamePanel extends ListenerPanel {
         this.steps++;
         this.stepLabel.setText(String.format("Step: %d", this.steps));
         checkVictory();
+        // record the state
+        MapModel.copyMatrix(model.getMatrix(), gameState);
+        states.add(gameState);
+        gameState = new int[model.getMatrix().length][model.getMatrix()[0].length];
     }
 
     public void checkVictory()
@@ -250,5 +262,20 @@ public class GamePanel extends ListenerPanel {
     public VictoryInterface getVictoryInterface()
     {
         return victoryInterface;
+    }
+
+    public MapModel getModel()
+    {
+        return model;
+    }
+
+    public ArrayList<int[][]> getStates()
+    {
+        return states;
+    }
+
+    public JLabel getStepLabel()
+    {
+        return stepLabel;
     }
 }
