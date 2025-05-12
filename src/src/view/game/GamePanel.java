@@ -16,6 +16,7 @@ import java.util.List;
  * It is the subclass of ListenerPanel, so that it should implement those four methods: do move left, up, down ,right.
  * The class contains a grids, which is the corresponding GUI view of the matrix variable in MapMatrix.
  */
+// if I change code directly on gitHub
 public class GamePanel extends ListenerPanel {
     private List<BoxComponent> boxes;
     private MapModel model;
@@ -24,16 +25,27 @@ public class GamePanel extends ListenerPanel {
     private int steps;
     private final int GRID_SIZE = 50;
     private BoxComponent selectedBox;
+    private VictoryInterface victoryInterface;
+    // to record every state after every move
+    private int[][] gameState ;
+    // store the state (two-dimensional list)
+    private ArrayList<int [][]> states;
 
     // constructor, new GamePanel(mapModel)
     public GamePanel(MapModel model) {
         boxes = new ArrayList<>();
         this.setVisible(true);
-        this.setFocusable(true);
+        this.setFocusable(true); // can be controlled by the keyboard
         this.setLayout(null);
         this.setSize(model.getWidth() * GRID_SIZE + 4, model.getHeight() * GRID_SIZE + 4); // GRID_SIZE is a unit length
         this.model = model;
         this.selectedBox = null;
+        this.victoryInterface = new VictoryInterface(this);
+        this.steps = 0;
+
+        gameState = new int[model.getMatrix().length][model.getMatrix()[0].length];
+        states = new ArrayList<>();
+
         initialGame();
     }
 
@@ -45,10 +57,13 @@ public class GamePanel extends ListenerPanel {
                         {1, 1, 1, 1, 1}
      */
 
+    // mark the 4 * 4 box
+    BoxComponent CaoCaoBox = new BoxComponent(Color.GREEN, 0, 0);
+    boolean isCaoCaoBox = false;
+
     //copy a map
     //from MapModel model
     public void initialGame() {
-        this.steps = 0;
         int[][] map = new int[model.getHeight()][model.getWidth()];
         for (int i = 0; i < map.length; i++)
         {
@@ -57,52 +72,63 @@ public class GamePanel extends ListenerPanel {
                 map[i][j] = model.getId(i, j);
             }
         }
-
         //build Component
         // paint the boxes regarding the mapModel
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 BoxComponent box = null;
-                if (map[i][j] == 1) {
+                if (map[i][j] / 10 == 1) {
                     box = new BoxComponent(Color.ORANGE, i, j);
                     box.setSize(GRID_SIZE, GRID_SIZE);
                     map[i][j] = 0;
-                } else if (map[i][j] == 2) {
+                    isCaoCaoBox = false;
+                } else if (map[i][j] / 10 == 2) {
                     box = new BoxComponent(Color.PINK, i, j);
                     box.setSize(GRID_SIZE * 2, GRID_SIZE);
                     map[i][j] = 0;
                     map[i][j + 1] = 0;
-                } else if (map[i][j] == 3) {
+                    isCaoCaoBox = false;
+                } else if (map[i][j] / 10 == 3) {
                     box = new BoxComponent(Color.BLUE, i, j);
                     box.setSize(GRID_SIZE, GRID_SIZE * 2);
                     map[i][j] = 0;
                     map[i + 1][j] = 0;
-                } else if (map[i][j] == 4) {
+                    isCaoCaoBox = false;
+                } else if (map[i][j] / 10 == 4) {
                     box = new BoxComponent(Color.GREEN, i, j);
                     box.setSize(GRID_SIZE * 2, GRID_SIZE * 2);
                     map[i][j] = 0;
                     map[i + 1][j] = 0;
                     map[i][j + 1] = 0;
                     map[i + 1][j + 1] = 0;
+                    isCaoCaoBox = true;
                 }
                 if (box != null) // map[i][j] is one of 1, 2, 3, 4
                 {
                     box.setLocation(j * GRID_SIZE + 2, i * GRID_SIZE + 2);
                     boxes.add(box); // add the specified box into the boxes array
                     this.add(box); // put the box component to the panel
+
+                    if (isCaoCaoBox)
+                    {
+                        // CaoCoaBox tracts the location of the 4 * 4 box
+                        // CaoCaoBox points to the same memory location asa the 4 * 4 box
+                        CaoCaoBox = boxes.getLast();
+                    }
                 }
             }
         }
         this.repaint();
     }
 
+
     // draw the background of the panel
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g); // clear the background
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(0, 0, this.getWidth(), this.getHeight()); // fill the panel with grey color
-        Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 2); //creast an outline
+        Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 2); //create an outline
         this.setBorder(border); // draw an outline
     }
 
@@ -110,6 +136,7 @@ public class GamePanel extends ListenerPanel {
     @Override
     public void doMouseClick(Point point)
     {
+        this.requestFocusInWindow();
         Component component = this.getComponentAt(point); // component is what the mouse clicks at
         if (component instanceof BoxComponent clickedComponent) // if (component instanceof BoxComponent) { BoxComponent clickedComponent = component);}
         {
@@ -176,6 +203,27 @@ public class GamePanel extends ListenerPanel {
     public void afterMove() {
         this.steps++;
         this.stepLabel.setText(String.format("Step: %d", this.steps));
+        checkVictory();
+        // record the state
+        MapModel.copyMatrix(model.getMatrix(), gameState);
+        states.add(gameState);
+        gameState = new int[model.getMatrix().length][model.getMatrix()[0].length];
+    }
+
+    public void checkVictory()
+    {
+        int targetLocationX = getWidth() - 2 * getGRID_SIZE() - 2; // padding
+        int targetLocationY = getHeight() / 2 - getGRID_SIZE();
+        int currentX = CaoCaoBox.getCol() * getGRID_SIZE() + 2;
+        int currentY = CaoCaoBox.getRow() * getGRID_SIZE() + 2;
+        if (currentX == targetLocationX && currentY == targetLocationY)
+        {
+            System.out.println("Game win");
+            CaoCaoBox.setColor(Color.RED);
+            repaint();
+            victoryInterface.getLabelGameWin().setText(String.format("Step: %d", this.getSteps()));
+            victoryInterface.setVisible(true);
+        }
     }
 
     // change the step counter
@@ -192,7 +240,42 @@ public class GamePanel extends ListenerPanel {
         return selectedBox;
     }
 
+    public void setSteps(int steps)
+    {
+        this.steps = steps;
+    }
+
+    public int getSteps()
+    {
+        return steps;
+    }
+
     public int getGRID_SIZE() {
         return GRID_SIZE;
+    }
+
+    public List<BoxComponent> getBoxes()
+    {
+        return boxes;
+    }
+
+    public VictoryInterface getVictoryInterface()
+    {
+        return victoryInterface;
+    }
+
+    public MapModel getModel()
+    {
+        return model;
+    }
+
+    public ArrayList<int[][]> getStates()
+    {
+        return states;
+    }
+
+    public JLabel getStepLabel()
+    {
+        return stepLabel;
     }
 }

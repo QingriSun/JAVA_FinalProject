@@ -1,18 +1,16 @@
-// paint the boxes.(color, select situation
-
-package src.view.game;
+package view.game;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
 public class BoxComponent extends JComponent {
-    private Color color;
+    private Color color;// 方块颜色
     private int row;
     private int col;
     private boolean isSelected;
 
-    // new BoxComponent(color, row, col);
+
     public BoxComponent(Color color, int row, int col) {
         this.color = color;
         this.row = row;
@@ -20,18 +18,18 @@ public class BoxComponent extends JComponent {
         isSelected = false;
     }
 
-    // color the boxes, and set the color of selected and unselected boxes' boundary
     @Override
-    public void paintComponent(Graphics g) // Graphic g is set by the system, equal to a painting pen
-    {
-        super.paintComponent(g); // clean up previous content and fill the blank with background color of the component
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
         g.setColor(color);
-        g.fillRect(0, 0, getWidth(), getHeight());
+        g.fillRect(0, 0, getWidth(), getHeight());//绘制填充矩形
+
         Border border ;
         if(isSelected){
-            border = BorderFactory.createLineBorder(Color.red,3);
+            border = BorderFactory.createLineBorder(Color.red,3); // 选中时红色粗边框
         }else {
-            border = BorderFactory.createLineBorder(Color.DARK_GRAY, 1);
+            border = BorderFactory.createLineBorder(Color.DARK_GRAY, 1);// 默认灰色细边框
         }
         this.setBorder(border);
     }
@@ -41,17 +39,12 @@ public class BoxComponent extends JComponent {
         this.repaint();
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public  void setColor(Color color)
-    {
-        this.color = color;
-    }
-
     public int getRow() {
         return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
     }
 
     public int getCol() {
